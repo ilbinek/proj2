@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 // Defines
-#define I_0 10.0E-12
+#define I_0 1.0E-12
 #define U_T 25.8563E-3
 
 /*
