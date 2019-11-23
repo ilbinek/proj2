@@ -23,8 +23,6 @@
  * -1   -   Not enough or too many parameters provided
  * -2   -   Error while parsing arguments
  * -3   -   Resistivity is 0
- * -4   -   Unidentified error
- * -5   -   Cannot approximate U_P
  */
 
 double loadArgument(char *arg);                         // Checks argument and returns it's double value
@@ -53,19 +51,11 @@ int main(int argc, char *argv[]) {
 
     // Calculate all values
     double U_P = diode(U_0, R, eps);
-    double U_R = U_0 - U_P;
-    double I_R = U_R / R;
-    double I_P = I_R;
-
-    // Check for error
-    /*if (errno != 0) {
-        fputs("ERROR", stderr);
-        return -4;
-    }*/
+    double I_P = I_0 * (exp(U_P / U_T) - 1);
 
     // Print results
     printf("Up=%g V\n", U_P);
-    printf("Ip=%g V\n", I_P);
+    printf("Ip=%g A\n", I_P);
     return 0;
 }
 
@@ -101,7 +91,7 @@ double loadArgument(char *arg) {
  */
 double diode(double u0, double r, double eps) {
     // Initialize return variable
-    double ret = 0.;
+    double ret;
     // Get U_P Value
     ret = calculateAccurateUP(u0, r, eps);
     // Return U_P Value
@@ -121,14 +111,8 @@ double calculateAccurateUP(double U_0, double R, double eps) {
     double low = 0.;
     double max = U_0;
 
-    // Sanity check if we can continue
-    /*if (getUPResult(low, U_0, R) * getUPResult(max, U_0, R) >= 0) {
-        fputs("ERROR - WRONG PARAMETERS", stderr);
-        exit(-5);
-    }*/
-
     // Variable that will hold the middle of our search
-    double mid = low;
+    double mid;
 
     // Loop till the difference is smaller or equal to epsilon
     while ((max - low) >= eps) {
@@ -156,8 +140,8 @@ double calculateAccurateUP(double U_0, double R, double eps) {
  * Returns the result with given U_P
  */
 double getUPResult(double U_P, double U_0, double R) {
-    double ret = 0.;
-    // I_0 *  (exp(U_P / U_T) - 1) -  (U_0 - U_P / R) = 0
+    double ret;
+    // I_0 * (exp(U_P / U_T) - 1) - (U_0 - U_P / R) = 0
     ret = I_0 * (exp(U_P / U_T) - 1) - (U_0 - U_P / R);
     return ret;
 }
