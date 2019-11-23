@@ -19,17 +19,19 @@
 
 /*
  * Exit codes:
- *  0    -   Everything OK
+ *  0   -   Everything OK
  * -1   -   Not enough or too many parameters provided
  * -2   -   Error while parsing arguments
  * -3   -   Resistivity is 0
  * -4   -   Unidentified error
+ * -5   -   Cannot approximate U_P
  */
 
-double loadArgument(char *arg);                                 // Checks argument and returns it's double value
-double diode(double u0, double r, double eps);                  // Calculates U_P based on provided parameters
-double getUPResult(double U_P, double U_0, double R);           // Returns the result with given U_P
-double calculateAccurateUP(double U_0, double R, double eps);   // Returns U_P that is approximated using bisection method
+double loadArgument(char *arg);                         // Checks argument and returns it's double value
+double diode(double u0, double r, double eps);          // Calculates U_P based on provided parameters
+double getUPResult(double U_P, double U_0, double R);   // Returns the result with given U_P
+double
+calculateAccurateUP(double U_0, double R, double eps);  // Returns U_P that is approximated using bisection method
 
 int main(int argc, char *argv[]) {
     // Check if we got enough arguments
@@ -56,10 +58,10 @@ int main(int argc, char *argv[]) {
     double I_P = I_R;
 
     // Check for error
-    if (errno != 0) {
+    /*if (errno != 0) {
         fputs("ERROR", stderr);
         return -4;
-    }
+    }*/
 
     // Print results
     printf("Up=%g V\n", U_P);
@@ -107,17 +109,41 @@ double diode(double u0, double r, double eps) {
 }
 
 /**
- *
  * @param U_0 input voltage
  * @param R resistance
- * @param EPS max deviation
+ * @param eps max deviation
  * @return approximated U_P
  *
  * Returns U_P that is approximated using bisection method
  */
-double calculateAccurateUP(double U_0, double R, double EPS) {
+double calculateAccurateUP(double U_0, double R, double eps) {
+    // Define clamps
+    double low = 0.;
+    double max = U_0;
 
-    return 0;
+    // Sanity check if we can continue
+    /*if (getUPResult(low, U_0, R) * getUPResult(max, U_0, R) >= 0) {
+        fputs("ERROR - WRONG PARAMETERS", stderr);
+        exit(-5);
+    }*/
+
+    // Variable that will hold the middle of our search
+    double mid = low;
+
+    // Loop till the difference is smaller or equal to epsilon
+    while ((max - low) >= eps) {
+        // Calculate middle
+        mid = (low + max) / 2;
+        // Decide where to assign middle value
+        if (getUPResult(mid, U_0, R) * getUPResult(low, U_0, R) < 0) {
+            max = mid;
+        } else {
+            low = mid;
+        }
+    }
+
+    // Return lower clamp as U_P
+    return low;
 }
 
 /**
