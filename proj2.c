@@ -14,7 +14,8 @@
  * Project 1: Project 2 - Iteration computation
  * Login: xpupak01
  * Bonus: None
- * Known bugs: TBA
+ * Known bugs: None
+ * Version: 1.2
  */
 
 /*
@@ -125,7 +126,6 @@ double calculateAccurateUP(double U_0, double R, double eps) {
             low = mid;
         }
     }
-
     // Return lower clamp as U_P
     return low;
 }
@@ -141,7 +141,7 @@ double calculateAccurateUP(double U_0, double R, double eps) {
  */
 double getUPResult(double U_P, double U_0, double R) {
     double ret;
-    // I_0 * (exp(U_P / U_T) - 1) - (U_0 - U_P / R) = 0
-    ret = I_0 * (exp(U_P / U_T) - 1) - (U_0 - U_P / R);
+    // I_0 * (exp(U_P / U_T) - 1) - ((U_0 - U_P) / R) = 0
+    ret = I_0 * (exp(U_P / U_T) - 1) - ((U_0 - U_P) / R);
     return ret;
 }
