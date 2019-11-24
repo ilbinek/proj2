@@ -116,7 +116,7 @@ double calculateAccurateUP(double U_0, double R, double eps) {
     double mid = U_0;
 
     // Loop till the difference is smaller or equal to epsilon
-    while (getUPResult(mid, U_0, R) >= eps) {
+    while (fabs(getUPResult(mid, U_0, R)) >= eps) {
         // Calculate middle
         mid = (low + max) / 2;
         // Decide where to assign middle value
