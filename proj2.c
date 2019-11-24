@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <math.h>
-#include <string.h>
 #include <stdlib.h>
 
 // Defines
@@ -44,6 +43,11 @@ int main(int argc, char *argv[]) {
     double R = loadArgument(argv[2]);
     double eps = loadArgument(argv[3]);
 
+    // Check arguments
+    if (U_0 < 0 || R < 0) {
+        fputs("INVALID PARAMETERS", stderr);
+    }
+
     // Check if R is zero
     if (R == 0) {
         fputs("ERROR - R cannot be 0", stderr);
@@ -73,10 +77,10 @@ double loadArgument(char *arg) {
     // Parses double using strtod function
     double ret = strtod(arg, &endptr);
     // Check if parse was successful
-    if (strcmp(endptr, "\0") != 0) {
+    if (*endptr != '\0') {
         // In case of error outputs error message
         fputs("ERROR WHILE PARSING ARGUMENTS", stderr);
-        return -2;
+        exit(-2);
     }
     // Returns parsed value
     return ret;
