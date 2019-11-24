@@ -131,7 +131,6 @@ double calculateAccurateUP(double U_0, double R, double eps) {
 }
 
 /**
- *
  * @param U_P voltage that is used
  * @param U_0 input voltage
  * @param R resistivity
