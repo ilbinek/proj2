@@ -14,7 +14,7 @@
  * Login: xpupak01
  * Bonus: None
  * Known bugs: None
- * Version: 1.2
+ * Version: 1.8
  */
 
 /*
@@ -113,6 +113,9 @@ double diode(double u0, double r, double eps) {
  * Returns U_P that is approximated using bisection method
  */
 double calculateAccurateUP(double U_0, double R, double eps) {
+    // Iterator
+    int i = 0;
+
     // Define clamps
     double low = 0.;
     double max = U_0;
@@ -130,6 +133,12 @@ double calculateAccurateUP(double U_0, double R, double eps) {
             low = mid;
         } else {
             max = mid;
+        }
+
+        i++;
+        // Return if stuck
+        if (i > 10000) {
+            return mid;
         }
     }
     // Return lower clamp as U_P
