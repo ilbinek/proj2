@@ -122,10 +122,9 @@ double calculateAccurateUP(double U_0, double R, double eps) {
 
     // Loop till the difference is smaller or equal to epsilon
     // while (fabs(getUPResult(mid, U_0, R)) >= eps) {
-    while ((max - low) > eps) {
+    while ((max - low) >= eps) {
         // Calculate middle
         mid = (low + max) / 2;
-        printf("%g, %g, %g\n", mid, low, max);
         // Decide where to assign middle value
         if (getUPResult(mid, U_0, R) < 0) {
             low = mid;
