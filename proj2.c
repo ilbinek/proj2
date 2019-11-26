@@ -22,7 +22,7 @@
  *  0   -   Everything OK
  * -1   -   Not enough or too many parameters provided
  * -2   -   Error while parsing arguments
- * -3   -   Resistivity is 0
+ * -3   -   Resistivity is 0 or other parameters are wrong
  */
 
 double loadArgument(char *arg);                         // Checks argument and returns it's double value
@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
     // Check arguments
     if (U_0 < 0 || R < 0) {
         fputs("INVALID PARAMETERS", stderr);
+        return -3;
     }
 
     // Check if R is zero
@@ -120,14 +121,16 @@ double calculateAccurateUP(double U_0, double R, double eps) {
     double mid = U_0;
 
     // Loop till the difference is smaller or equal to epsilon
-    while (fabs(getUPResult(mid, U_0, R)) >= eps) {
+    // while (fabs(getUPResult(mid, U_0, R)) >= eps) {
+    while ((max - low) > eps) {
         // Calculate middle
         mid = (low + max) / 2;
+        printf("%g, %g, %g\n", mid, low, max);
         // Decide where to assign middle value
-        if (getUPResult(mid, U_0, R) * getUPResult(low, U_0, R) < 0) {
-            max = mid;
-        } else {
+        if (getUPResult(mid, U_0, R) < 0) {
             low = mid;
+        } else {
+            max = mid;
         }
     }
     // Return lower clamp as U_P
