@@ -14,7 +14,7 @@
  * Login: xpupak01
  * Bonus: None
  * Known bugs: None
- * Version: 1.8
+ * Version: 2.0
  */
 
 /*
@@ -45,13 +45,13 @@ int main(int argc, char *argv[]) {
 
     // Check arguments
     if (U_0 < 0 || R < 0) {
-        fputs("INVALID PARAMETERS", stderr);
+        fputs("INVALID PARAMETERS\n", stderr);
         return -3;
     }
 
     // Check if R is zero
     if (R == 0) {
-        fputs("ERROR - R cannot be 0", stderr);
+        fputs("ERROR - R cannot be 0\n", stderr);
         return -3;
     }
 
@@ -80,7 +80,7 @@ double loadArgument(char *arg) {
     // Check if parse was successful
     if (*endptr != '\0') {
         // In case of error outputs error message
-        fputs("ERROR WHILE PARSING ARGUMENTS", stderr);
+        fputs("ERROR WHILE PARSING ARGUMENTS\n", stderr);
         exit(-2);
     }
     // Returns parsed value
