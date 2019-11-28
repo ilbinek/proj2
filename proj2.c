@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     // Check arguments
     if (U_0 < 0 || R < 0) {
         fputs("INVALID PARAMETERS\n", stderr);
-        return -3;
+        return -2;
     }
 
     // Check if R is zero
@@ -81,7 +81,7 @@ double loadArgument(char *arg) {
     if (*endptr != '\0') {
         // In case of error outputs error message
         fputs("ERROR WHILE PARSING ARGUMENTS\n", stderr);
-        exit(-2);
+        return -1;
     }
     // Returns parsed value
     return ret;
@@ -113,19 +113,18 @@ double diode(double u0, double r, double eps) {
  * Returns U_P that is approximated using bisection method
  */
 double calculateAccurateUP(double U_0, double R, double eps) {
-    // Iterator
-    int i = 0;
-
     // Define clamps
     double low = 0.;
     double max = U_0;
+    // Control variable
+    double ml = low;
 
     // Variable that will hold the middle of our search
     double mid = U_0;
 
-    // Loop till the difference is smaller or equal to epsilon
-    // while (fabs(getUPResult(mid, U_0, R)) >= eps) {
-    while ((max - low) >= eps) {
+    // Loop till the difference is smaller or equal to epsilon or get stuck
+    while ((max - low) >= eps && ml != (max - low)) {
+        ml = max - low;
         // Calculate middle
         mid = (low + max) / 2;
         // Decide where to assign middle value
@@ -134,14 +133,9 @@ double calculateAccurateUP(double U_0, double R, double eps) {
         } else {
             max = mid;
         }
-
-        i++;
-        // Return if stuck
-        if (i > 10000) {
-            return mid;
-        }
     }
-    // Return lower clamp as U_P
+
+    // Return mid clamp as U_P
     return mid;
 }
 
