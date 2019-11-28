@@ -13,7 +13,6 @@
  * Project 1: Project 2 - Iteration computation
  * Login: xpupak01
  * Bonus: None
- * Known bugs: None
  * Version: 2.0
  */
 
